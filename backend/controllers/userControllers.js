@@ -22,7 +22,7 @@ const authUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: process.env.NODO_ENV !== "development",
       sameSite: "strict",
-      maxAge: 60 * 50,
+      maxAge: 60 * 60 * 1000,
     });
 
     res.json({
