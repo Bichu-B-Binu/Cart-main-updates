@@ -6,9 +6,15 @@ import { IoMdContact } from "react-icons/io";
 import styles from "./Header.module.css";
 import { LinkContainer } from "react-router-bootstrap";
 import { useSelector } from "react-redux";
-import { Badge } from "react-bootstrap";
+import { Badge, NavDropdown } from "react-bootstrap";
 export const Header = () => {
-  const {cartItems}=useSelector((state)=>state.cart)
+  const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const logouthandler = () => {
+    console.log("object");
+  };
+
   // console.log(cartItems);
   return (
     <>
@@ -29,25 +35,41 @@ export const Header = () => {
                 <LinkContainer to={"/cart"}>
                   <Nav.Link className={styles.navIcons}>
                     <FaShoppingCart />
-                    <span className="ps-1 cart">Cart
-                    {cartItems.length>0&&(
-                      <Badge pill bg="success" style={{marginLeft:"5px"}}>{cartItems.reduce((a,c)=>{
-                        let qty=Number(c.qty);
-                        return a+qty
-                      },0)}</Badge>
-                    )}
+                    <span className="ps-1 cart">
+                      Cart
+                      {cartItems.length > 0 && (
+                        <Badge pill bg="success" style={{ marginLeft: "5px" }}>
+                          {cartItems.reduce((a, c) => {
+                            let qty = Number(c.qty);
+                            return a + qty;
+                          }, 0)}
+                        </Badge>
+                      )}
                     </span>
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to={"/login"}>
-                  <Nav.Link
-                    eventKey={2}
-                    className={`btn btn-dark ${styles.navIcons}`}
-                  >
-                    <IoMdContact />
-                    <span className="ps-1 ">Sign In</span>
-                  </Nav.Link>
-                </LinkContainer>
+                {userInfo ? (
+                  <>
+                    <NavDropdown title={userInfo.name} id="username">
+                      <LinkContainer to={"/profile"}>
+                        <NavDropdown.Item>Profile</NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Item onClick={logouthandler}>
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </>
+                ) : (
+                  <LinkContainer to={"/login"}>
+                    <Nav.Link
+                      eventKey={2}
+                      className={`btn btn-dark ${styles.navIcons}`}
+                    >
+                      <IoMdContact />
+                      <span className="ps-1 ">Sign In</span>
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>

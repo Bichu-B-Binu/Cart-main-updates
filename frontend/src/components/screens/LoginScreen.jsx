@@ -1,15 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
+import { useLoginMutation } from "../../slice/userApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "../../slice/authSlice";
+import { toast } from "react-toastify";
+import Loder from "../Loder";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get("redirect") || "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [userInfo, navigate, redirect]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("submit");
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
   };
 
   return (
@@ -37,14 +65,17 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary">
+        <Button disabled={isLoading} type="submit" variant="primary">
           Sign In
         </Button>
+        {isLoading && <Loder />}
       </Form>
       <Row className="py-3">
         <Col>
           New Customer?
-          <Link to={"/register"}>Register</Link>
+          <Link to={redirect ? `register?redirect=${redirect}` : "/register"}>
+            Register
+          </Link>
         </Col>
       </Row>
     </FormContainer>

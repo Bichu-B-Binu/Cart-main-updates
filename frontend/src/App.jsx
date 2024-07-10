@@ -6,6 +6,10 @@ import { Route, Routes } from "react-router-dom";
 import { ProductScreen } from "./components/screens/ProductScreen";
 import CartScreen from "./components/screens/CartScreen";
 import LoginScreen from "./components/screens/LoginScreen";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
@@ -19,6 +23,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <ToastContainer />
     </>
   );
 }
