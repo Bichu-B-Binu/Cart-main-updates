@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RegisterScreen from "./components/screens/RegisterScreen";
 import ShippingScreen from "./components/screens/ShippingScreen";
+import PrivateRoutes from "./components/PrivateRoutes";
 
 function App() {
   return (
@@ -23,7 +24,10 @@ function App() {
           <Route path="/cart" element={<CartScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
-          <Route path="/shipping" element={<ShippingScreen />} />
+
+          <Route path="" element={<PrivateRoutes />}>
+            <Route path="/shipping" element={<ShippingScreen />} />
+          </Route>
         </Routes>
       </main>
       <Footer />
