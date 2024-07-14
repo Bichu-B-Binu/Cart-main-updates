@@ -1,14 +1,11 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-
-import { useNavigate } from "react-router-dom";
+import { Container, Nav, Navbar, NavDropdown, Badge } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoMdContact } from "react-icons/io";
-import styles from "./Header.module.css";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, NavDropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import styles from "./Header.module.css";
+
 import { useLogoutMutation } from "../slice/userApiSlice";
 import { logout } from "../slice/authSlice";
 export const Header = () => {
@@ -26,7 +23,7 @@ export const Header = () => {
       dispatch(logout());
       navigate("login");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
